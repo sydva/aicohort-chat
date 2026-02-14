@@ -25,6 +25,7 @@ const {
   loadAgent: loadAgentFn,
   createMultiAgentMapper,
   filterMalformedContentParts,
+  hydrateMissingIndexTokenCounts,
 } = require('@librechat/api');
 const {
   Callback,
@@ -53,41 +54,6 @@ const { getMCPManager } = require('~/config');
 const db = require('~/models');
 
 const loadAgent = (params) => loadAgentFn(params, { getAgent: db.getAgent, getMCPServerTools });
-
-/**
- * Lazily fills missing token counts for formatted LangChain messages.
- * Preserves precomputed counts and only computes undefined indices.
- * @param {Object} params
- * @param {BaseMessage[]} params.messages
- * @param {Record<number, number | undefined> | undefined} params.indexTokenCountMap
- * @param {(message: BaseMessage) => number} params.tokenCounter
- * @returns {Record<number, number>}
- */
-function hydrateMissingIndexTokenCounts({ messages, indexTokenCountMap, tokenCounter }) {
-  /** @type {Record<number, number>} */
-  const hydratedMap = {};
-
-  if (indexTokenCountMap) {
-    for (const [index, tokenCount] of Object.entries(indexTokenCountMap)) {
-      if (typeof tokenCount === 'number' && Number.isFinite(tokenCount) && tokenCount > 0) {
-        hydratedMap[Number(index)] = tokenCount;
-      }
-    }
-  }
-
-  for (let i = 0; i < messages.length; i++) {
-    if (
-      typeof hydratedMap[i] === 'number' &&
-      Number.isFinite(hydratedMap[i]) &&
-      hydratedMap[i] > 0
-    ) {
-      continue;
-    }
-    hydratedMap[i] = tokenCounter(messages[i]);
-  }
-
-  return hydratedMap;
-}
 
 class AgentClient extends BaseClient {
   constructor(options = {}) {
