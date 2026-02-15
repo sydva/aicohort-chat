@@ -959,6 +959,7 @@ export const summarizationAgentOverrideSchema = z.object({
   model: z.string().optional(),
   parameters: z.record(z.any()).optional(),
   prompt: z.string().optional(),
+  stream: z.boolean().optional(),
 });
 
 export const summarizationConfigSchema = z.object({
@@ -968,6 +969,7 @@ export const summarizationConfigSchema = z.object({
   parameters: z.record(z.any()).optional(),
   trigger: summarizationTriggerSchema.optional(),
   prompt: z.string().optional(),
+  stream: z.boolean().optional(),
   agents: z.record(summarizationAgentOverrideSchema).optional(),
 });
 
