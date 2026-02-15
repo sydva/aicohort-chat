@@ -963,6 +963,19 @@ export const summarizationAgentOverrideSchema = z.object({
   maxSummaryTokens: z.number().positive().optional(),
 });
 
+export const contextPruningSchema = z.object({
+  enabled: z.boolean().optional(),
+  keepLastAssistants: z.number().min(0).max(10).optional(),
+  softTrimRatio: z.number().min(0).max(1).optional(),
+  hardClearRatio: z.number().min(0).max(1).optional(),
+  minPrunableToolChars: z.number().min(0).optional(),
+});
+
+export const overflowRecoverySchema = z.object({
+  enabled: z.boolean().optional(),
+  maxAttempts: z.number().min(1).max(10).optional(),
+});
+
 export const summarizationConfigSchema = z.object({
   enabled: z.boolean().optional(),
   provider: z.string().optional(),
@@ -973,6 +986,12 @@ export const summarizationConfigSchema = z.object({
   stream: z.boolean().optional(),
   reserveTokensRatio: z.number().min(0).max(1).optional(),
   maxSummaryTokens: z.number().positive().optional(),
+  /** Absolute minimum tokens reserved for summarization output. */
+  minReserveTokens: z.number().min(0).optional(),
+  /** Position-based context pruning configuration. */
+  contextPruning: contextPruningSchema.optional(),
+  /** Overflow recovery configuration. */
+  overflowRecovery: overflowRecoverySchema.optional(),
   agents: z.record(summarizationAgentOverrideSchema).optional(),
 });
 
