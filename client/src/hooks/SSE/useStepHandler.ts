@@ -675,16 +675,18 @@ export default function useStepHandler({
           const currentMessages = getMessages() || [];
           const lastMessage = currentMessages[currentMessages.length - 1];
           if (lastMessage && Array.isArray(lastMessage.content)) {
+            let didFinalize = false;
             const updated = lastMessage.content.map((part) => {
               if (part?.type === ContentTypes.SUMMARY && (part as SummaryContentPart).summarizing) {
-                return {
-                  ...(completeData.summary ?? {}),
-                  summarizing: false,
-                } as SummaryContentPart;
+                if (!completeData.summary) {
+                  return part;
+                }
+                didFinalize = true;
+                return { ...completeData.summary, summarizing: false } as SummaryContentPart;
               }
               return part;
             });
-            if (updated !== lastMessage.content) {
+            if (didFinalize) {
               const finalized = { ...lastMessage, content: updated };
               messageMap.current.set(lastMessage.messageId, finalized);
               setMessages([...currentMessages.slice(0, -1), finalized]);

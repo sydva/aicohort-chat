@@ -108,16 +108,16 @@ const Part = memo(function Part({
       return null;
     }
     return <Reasoning reasoning={reasoning} isLast={isLast ?? false} />;
-    } else if (part.type === ContentTypes.SUMMARY) {
-      return (
-        <Summary
-          text={part.text ?? ''}
-          model={part.model}
-          provider={part.provider}
-          tokenCount={part.tokenCount}
-          summarizing={part.summarizing}
-        />
-      );
+  } else if (part.type === ContentTypes.SUMMARY) {
+    return (
+      <Summary
+        text={part.text ?? ''}
+        model={part.model}
+        provider={part.provider}
+        tokenCount={part.tokenCount}
+        summarizing={part.summarizing}
+      />
+    );
   } else if (part.type === ContentTypes.TOOL_CALL) {
     const toolCall = part[ContentTypes.TOOL_CALL];
 
