@@ -73,12 +73,14 @@ export async function recordCollectedUsage(
     return;
   }
 
-  const messageUsages = collectedUsage.filter(
-    (usage) => usage != null && usage.usage_type !== 'summarization',
-  );
-  const summarizationUsages = collectedUsage.filter(
-    (usage) => usage != null && usage.usage_type === 'summarization',
-  );
+  const messageUsages: UsageMetadata[] = [];
+  const summarizationUsages: UsageMetadata[] = [];
+  for (const usage of collectedUsage) {
+    if (usage == null) {
+      continue;
+    }
+    (usage.usage_type === 'summarization' ? summarizationUsages : messageUsages).push(usage);
+  }
 
   const firstUsage = messageUsages[0];
   const input_tokens =
