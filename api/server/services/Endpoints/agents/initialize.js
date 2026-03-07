@@ -79,9 +79,12 @@ function createToolLoader(signal, streamId = null, definitionsOnly = false) {
 }
 
 /**
- * Returns the canonical DB messageId from a LangChain BaseMessage when available.
- * @param {BaseMessage | Record<string, unknown> | undefined} message
- * @returns {string | undefined}
+ * Initializes the AgentClient for a given request/response cycle.
+ * @param {Object} params
+ * @param {Express.Request} params.req
+ * @param {Express.Response} params.res
+ * @param {AbortSignal} params.signal
+ * @param {Object} params.endpointOption
  */
 const initializeClient = async ({ req, res, signal, endpointOption }) => {
   if (!endpointOption) {

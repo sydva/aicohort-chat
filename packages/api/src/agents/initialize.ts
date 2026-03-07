@@ -32,6 +32,8 @@ import { generateArtifactsPrompt } from '~/prompts';
 import { getProviderConfig } from '~/endpoints';
 import { primeResources } from './resources';
 
+const DEFAULT_RESERVE_RATIO = 0.05;
+
 /**
  * Extended agent type with additional fields needed after initialization
  */
@@ -399,8 +401,6 @@ export async function initializeAgent(
   const agentMaxContextNum = Number(agentMaxContextTokens) || 18000;
   const maxOutputTokensNum = Number(maxOutputTokens) || 0;
   const baseContextTokens = agentMaxContextNum - maxOutputTokensNum;
-
-  const DEFAULT_RESERVE_RATIO = 0.05;
 
   const finalAttachments: IMongoFile[] = (primedAttachments ?? [])
     .filter((a): a is TFile => a != null)
