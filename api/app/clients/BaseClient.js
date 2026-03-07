@@ -363,7 +363,12 @@ class BaseClient {
           tokenCount: tokenCountMap.summaryMessage.tokenCount,
           createdAt: new Date().toISOString(),
         };
-        const existingContent = Array.isArray(message.content) ? message.content : [];
+        let existingContent = [];
+        if (Array.isArray(message.content)) {
+          existingContent = [...message.content];
+        } else if (message.content) {
+          existingContent = [{ type: ContentTypes.TEXT, text: message.content }];
+        }
         let existingSummaryIndex = -1;
         for (let index = existingContent.length - 1; index >= 0; index--) {
           if (existingContent[index]?.type === ContentTypes.SUMMARY) {
