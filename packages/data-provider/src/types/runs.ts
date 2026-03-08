@@ -38,10 +38,3 @@ export enum StepEvents {
   ON_SUMMARIZE_DELTA = 'on_summarize_delta',
   ON_SUMMARIZE_COMPLETE = 'on_summarize_complete',
 }
-
-export type SummarizationStatus = {
-  status: 'started' | 'completed' | 'failed';
-  agentId: string;
-  error?: string;
-  persistence?: 'persisted' | 'deferred' | 'skipped';
-};

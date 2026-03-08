@@ -31,7 +31,7 @@ export type ConvertJsonSchemaToZodOptions = {
 };
 
 export type AppSummarizationConfig = SummarizationConfig & {
-  enabled?: boolean;
+  enabled: boolean;
 };
 
 export interface FunctionTool {
