@@ -2,7 +2,10 @@ import { Run, Providers, Constants } from '@librechat/agents';
 import { providerEndpointMap, KnownEndpoints } from 'librechat-data-provider';
 import type { BaseMessage } from '@langchain/core/messages';
 import type {
+  SummarizationConfig as AgentSummarizationConfig,
   MultiAgentGraphConfig,
+  OverflowRecoveryConfig,
+  ContextPruningConfig,
   OpenAIClientOptions,
   StandardGraphConfig,
   LCToolRegistry,
@@ -369,9 +372,16 @@ export async function createRun({
         hasSummarizationProvider &&
         hasSummarizationModel,
       summarizationConfig: resolvedSummarizationConfig
-        ? {
+        ? ({
             enabled: resolvedSummarizationConfig.enabled,
-            trigger: resolvedSummarizationConfig.trigger,
+            trigger:
+              resolvedSummarizationConfig.trigger?.type &&
+              resolvedSummarizationConfig.trigger?.value
+                ? {
+                    type: resolvedSummarizationConfig.trigger.type,
+                    value: resolvedSummarizationConfig.trigger.value,
+                  }
+                : undefined,
             provider: resolvedSummarizationConfig.provider,
             model: resolvedSummarizationConfig.model,
             parameters: resolvedSummarizationConfig.parameters,
@@ -381,12 +391,16 @@ export async function createRun({
             reserveRatio: resolvedSummarizationConfig.reserveTokensRatio,
             maxSummaryTokens:
               perAgentOverride?.maxSummaryTokens ?? resolvedSummarizationConfig.maxSummaryTokens,
-          }
+          } satisfies AgentSummarizationConfig)
         : undefined,
       initialSummary,
       minReserveTokens: resolvedSummarizationConfig?.minReserveTokens,
-      contextPruningConfig: resolvedSummarizationConfig?.contextPruning,
-      overflowRecoveryConfig: resolvedSummarizationConfig?.overflowRecovery,
+      contextPruningConfig: resolvedSummarizationConfig?.contextPruning as
+        | ContextPruningConfig
+        | undefined,
+      overflowRecoveryConfig: resolvedSummarizationConfig?.overflowRecovery as
+        | OverflowRecoveryConfig
+        | undefined,
       maxToolResultChars: agent.maxToolResultChars,
     };
     agentInputs.push(agentInput);
