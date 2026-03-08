@@ -56,6 +56,8 @@ export type InitializedAgent = Agent & {
   toolDefinitions?: LCTool[];
   /** Precomputed flag indicating if any tools have defer_loading enabled (for efficient runtime checks) */
   hasDeferredTools?: boolean;
+  /** Maximum characters allowed in a single tool result before truncation. */
+  maxToolResultChars?: number;
 };
 
 /**
@@ -306,7 +308,7 @@ export async function initializeAgent(
     hasDeferredTools: false,
   };
 
-  const { getOptions, overrideProvider } = getProviderConfig({
+  const { getOptions, overrideProvider, customEndpointConfig } = getProviderConfig({
     provider,
     appConfig: req.config,
   });
@@ -406,6 +408,19 @@ export async function initializeAgent(
     .filter((a): a is TFile => a != null)
     .map((a) => a as unknown as IMongoFile);
 
+  const endpointConfigs = req.config?.endpoints;
+  const providerConfig =
+    customEndpointConfig ?? endpointConfigs?.[agent.provider as keyof typeof endpointConfigs];
+  const providerMaxToolResultChars =
+    providerConfig != null &&
+    typeof providerConfig === 'object' &&
+    !Array.isArray(providerConfig) &&
+    'maxToolResultChars' in providerConfig
+      ? (providerConfig.maxToolResultChars as number | undefined)
+      : undefined;
+  const maxToolResultCharsResolved =
+    providerMaxToolResultChars ?? endpointConfigs?.all?.maxToolResultChars;
+
   const initializedAgent: InitializedAgent = {
     ...agent,
     resendFiles,
@@ -419,6 +434,7 @@ export async function initializeAgent(
     toolContextMap: toolContextMap ?? {},
     useLegacyContent: !!options.useLegacyContent,
     tools: (tools ?? []) as GenericTool[] & string[],
+    maxToolResultChars: maxToolResultCharsResolved,
     maxContextTokens:
       maxContextTokens != null && maxContextTokens > 0
         ? maxContextTokens
