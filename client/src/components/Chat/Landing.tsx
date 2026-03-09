@@ -218,7 +218,8 @@ export default function Landing({ centerFormOnLanding }: { centerFormOnLanding: 
         </a>
         <div className="animate-fadeIn mt-8 flex items-center gap-2 text-xs text-text-secondary opacity-60">
           <span>Powered by</span>
-          <img src="/assets/metr-logo.svg" alt="METR" className="h-4 dark:invert" />
+          <img src="/assets/metr-logo.svg" alt="METR" className="h-4 dark:hidden" />
+          <img src="/assets/metr-logo-white.svg" alt="METR" className="hidden h-4 dark:block" />
         </div>
       </div>
     </div>
