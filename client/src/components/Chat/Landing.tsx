@@ -205,7 +205,10 @@ export default function Landing({ centerFormOnLanding }: { centerFormOnLanding: 
         )}
         <a
           href="/dashboard"
-          className="animate-fadeIn mt-6 inline-flex items-center gap-2 rounded-xl bg-green-600 px-6 py-3 text-base font-semibold text-white shadow-lg transition-all duration-200 hover:bg-green-700 hover:shadow-xl active:scale-95"
+          className="animate-fadeIn mt-6 inline-flex items-center gap-2 rounded-xl px-6 py-3 text-base font-semibold text-white shadow-lg transition-all duration-200 hover:shadow-xl active:scale-95"
+          style={{ backgroundColor: '#589885' }}
+          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#4a8573')}
+          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#589885')}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="4 17 10 11 4 5" />
@@ -213,6 +216,10 @@ export default function Landing({ centerFormOnLanding }: { centerFormOnLanding: 
           </svg>
           Get Your API Key &amp; Coding Agent
         </a>
+        <div className="animate-fadeIn mt-8 flex items-center gap-2 text-xs text-text-secondary opacity-60">
+          <span>Powered by</span>
+          <img src="/assets/metr-logo.svg" alt="METR" className="h-4 dark:invert" />
+        </div>
       </div>
     </div>
   );

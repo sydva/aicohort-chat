@@ -88,11 +88,11 @@ export default defineConfig(({ command }) => ({
       },
       includeAssets: [],
       manifest: {
-        name: 'LibreChat',
-        short_name: 'LibreChat',
+        name: 'AI Cohort',
+        short_name: 'AI Cohort',
         display: 'standalone',
         background_color: '#000000',
-        theme_color: '#009688',
+        theme_color: '#589885',
         icons: [
           {
             src: 'assets/favicon-32x32.png',
