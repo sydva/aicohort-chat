@@ -18,6 +18,8 @@ interface UseToolToggleOptions {
   localStorageKey: LocalStorageKeys;
   isAuthenticated?: boolean;
   setIsDialogOpen?: (open: boolean) => void;
+  /** Default pinned state for this tool (default: false) */
+  defaultPinned?: boolean;
   /** Options for auth verification */
   authConfig?: {
     toolId: string;
@@ -33,6 +35,7 @@ export function useToolToggle({
   isAuthenticated: externalIsAuthenticated,
   setIsDialogOpen,
   authConfig,
+  defaultPinned = false,
 }: UseToolToggleOptions) {
   const key = conversationId ?? Constants.NEW_CONVO;
   const [ephemeralAgent, setEphemeralAgent] = useRecoilState(ephemeralAgentByConvoId(key));
@@ -76,7 +79,7 @@ export function useToolToggle({
     }
   }, [ephemeralAgent, toolKey, storageKey]);
 
-  const [isPinned, setIsPinned] = useLocalStorage<boolean>(`${localStorageKey}pinned`, false);
+  const [isPinned, setIsPinned] = useLocalStorage<boolean>(`${localStorageKey}pinned`, defaultPinned);
 
   const handleChange = useCallback(
     ({ e, value }: { e?: React.ChangeEvent<HTMLInputElement>; value: ToolValue }) => {

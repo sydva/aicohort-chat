@@ -144,6 +144,14 @@ export default function BadgeRowProvider({
         }
       }
 
+      // Default web search and code interpreter to enabled for new users
+      if (initialValues[Tools.execute_code] === undefined && isNewConvo) {
+        initialValues[Tools.execute_code] = true;
+      }
+      if (initialValues[Tools.web_search] === undefined && isNewConvo) {
+        initialValues[Tools.web_search] = true;
+      }
+
       const hasOverrides = Object.keys(initialValues).length > 0;
 
       /** Read persisted MCP values from localStorage */
@@ -202,6 +210,7 @@ export default function BadgeRowProvider({
     setIsDialogOpen: setCodeDialogOpen,
     toolKey: Tools.execute_code,
     localStorageKey: LocalStorageKeys.LAST_CODE_TOGGLE_,
+    defaultPinned: true,
     authConfig: {
       toolId: Tools.execute_code,
       queryOptions: { retry: 1 },
@@ -217,6 +226,7 @@ export default function BadgeRowProvider({
     storageContextKey,
     toolKey: Tools.web_search,
     localStorageKey: LocalStorageKeys.LAST_WEB_SEARCH_TOGGLE_,
+    defaultPinned: true,
     setIsDialogOpen: setWebSearchDialogOpen,
     authConfig: {
       toolId: Tools.web_search,
